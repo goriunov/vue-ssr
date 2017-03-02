@@ -12,7 +12,10 @@ import axios from 'axios'
 sync(store, router);
 
 //Bind HTTP requests
-Vue.use(VueAxios, axios);
+let axiosInstance = axios.create({
+  baseURL: 'URL prefix'
+});
+Vue.use(VueAxios, axiosInstance);
 
 // create the app instance.
 // here we inject the router and store to all child components,

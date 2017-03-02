@@ -36,7 +36,9 @@ module.exports = {
         test: /\.js$/,
         loader: 'buble-loader',
         exclude: /node_modules/,
-        options: {
+        query: {
+          presets: ["stage-2" , "es2015"],
+          plugins: ["transform-runtime"],
           objectAssign: 'Object.assign'
         }
       },

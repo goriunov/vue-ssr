@@ -6,11 +6,16 @@ Vue.use(Router);
 import Comment from '../components/Comment.vue'
 import Item from '../components/Item.vue'
 
-export default new Router({
+
+let router = new Router({
   mode: 'history',
   scrollBehavior: () => ({ y: 0 }),
   routes: [
     { path: '/one', component: Comment },
-    { path: '/two', component: Item }
+    { path: '/two', component: Item },
+    { path: '*', redirect: '/one' }
   ]
-})
+});
+
+
+export default router;
