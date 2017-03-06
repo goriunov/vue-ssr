@@ -1,4 +1,7 @@
+import Vue from 'vue';
 import { app, router, store } from './app'
+
+const _app = new Vue(app);
 
 const isDev = process.env.NODE_ENV !== 'production'
 
@@ -28,14 +31,14 @@ export default context => {
       return component.preFetch(store)
     }
   })).then(() => {
-    isDev && console.log(`data pre-fetch: ${Date.now() - s}ms`)
+    isDev && console.log(`data pre-fetch: ${Date.now() - s}ms`);
     // After all preFetch hooks are resolved, our store is now
     // filled with the state needed to render the app.
     // Expose the state on the render context, and let the request handler
     // inline the state in the HTML response. This allows the client-side
     // store to pick-up the server-side state without having to duplicate
     // the initial data fetching on the client.
-    context.initialState = store.state
-    return app
+    context.initialState = store.state;
+    return _app;
   })
 }

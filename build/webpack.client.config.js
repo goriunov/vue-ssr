@@ -13,7 +13,8 @@ const config = Object.assign({}, base, {
     // strip comments in Vue code
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
-      'process.env.VUE_ENV': '"client"'
+      'process.env.VUE_ENV': '"client"',
+      'process.BROWSER': true
     }),
     // extract vendor chunks for better caching
     new webpack.optimize.CommonsChunkPlugin({
@@ -27,11 +28,7 @@ const config = Object.assign({}, base, {
 })
 
 if (process.env.NODE_ENV === 'production') {
-  // Use ExtractTextPlugin to extract CSS into a single file
-  // so it's applied on initial render.
-  // vueConfig is already included in the config via LoaderOptionsPlugin
-  // here we overwrite the loader config for <style lang="stylus">
-  // so they are extracted.
+
   vueConfig.loaders = {
     css: ExtractTextPlugin.extract({
       loader: 'css-loader',
@@ -40,7 +37,10 @@ if (process.env.NODE_ENV === 'production') {
   }
 
   config.plugins.push(
-    new ExtractTextPlugin('styles.[hash].css'),
+    new ExtractTextPlugin({
+      filename:'styles.[hash].css',
+      allChunks: true
+    }),
     // this is needed in webpack 2 for minifying CSS
     new webpack.LoaderOptionsPlugin({
       minimize: true

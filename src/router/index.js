@@ -4,8 +4,8 @@ import Router from 'vue-router'
 Vue.use(Router);
 
 import Comment from '../components/Comment.vue'
-import Item from '../components/Item.vue'
 
+const Item = process.BROWSER  ? () => System.import('../components/Item.vue') : require('../components/Item.vue');
 
 let router = new Router({
   mode: 'history',
