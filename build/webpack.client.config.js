@@ -1,50 +1,29 @@
-const webpack = require('webpack')
-const base = require('./webpack.base.config')
-const vueConfig = require('./vue-loader.config')
-const HTMLPlugin = require('html-webpack-plugin')
-const ExtractTextPlugin = require('extract-text-webpack-plugin')
-const SWPrecachePlugin = require('sw-precache-webpack-plugin')
+const webpack = require('webpack');
+const merge = require('webpack-merge');
+const base = require('./webpack.base.config');
+const HTMLPlugin = require('html-webpack-plugin');
 
-const config = Object.assign({}, base, {
-  devtool: false,
-  resolve: {
-  },
-  plugins: (base.plugins || []).concat([
-    // strip comments in Vue code
+const config = merge(base, {
+  resolve: {},
+  plugins: [
+    // strip dev-only code in Vue source
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
-      'process.env.VUE_ENV': '"client"',
-      'process.BROWSER': true
+      'process.env.VUE_ENV': '"client"'
     }),
     // extract vendor chunks for better caching
     new webpack.optimize.CommonsChunkPlugin({
-      name: 'vendor'
+      name: ['vendor', 'manifest']
     }),
     // generate output HTML
     new HTMLPlugin({
       template: 'src/index.template.html'
     })
-  ])
+  ]
 })
 
 if (process.env.NODE_ENV === 'production') {
-
-  vueConfig.loaders = {
-    css: ExtractTextPlugin.extract({
-      loader: 'css-loader',
-      fallbackLoader: 'vue-style-loader' // <- this is a dep of vue-loader
-    })
-  }
-
   config.plugins.push(
-    new ExtractTextPlugin({
-      filename:'styles.[hash].css',
-      allChunks: true
-    }),
-    // this is needed in webpack 2 for minifying CSS
-    new webpack.LoaderOptionsPlugin({
-      minimize: true
-    }),
     // minify JS
     new webpack.optimize.UglifyJsPlugin({
       compress: {
@@ -54,4 +33,4 @@ if (process.env.NODE_ENV === 'production') {
   )
 }
 
-module.exports = config
+module.exports = config;

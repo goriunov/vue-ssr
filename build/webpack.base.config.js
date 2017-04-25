@@ -1,13 +1,17 @@
-const path = require('path')
-const vueConfig = require('./vue-loader.config')
+const path = require('path');
+const vueConfig = require('./vue-loader.config');
+const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin');
+
+const isProd = process.env.NODE_ENV === 'production';
 
 module.exports = {
-  devtool: '#source-map',
+  devtool: isProd
+    ? false
+    : '#cheap-module-eval-source-map',
   entry: {
-    app: './src/client-entry.js',
+    app: './src/entry-client.js',
     vendor: [
-      'es6-promise',
-      'axios',
+      'es6-promise/auto',
       'vue',
       'vue-router',
       'vuex',
@@ -36,9 +40,7 @@ module.exports = {
         test: /\.js$/,
         loader: 'buble-loader',
         exclude: /node_modules/,
-        query: {
-          presets: ["stage-2" , "es2015"],
-          plugins: ["transform-runtime"],
+        options: {
           objectAssign: 'Object.assign'
         }
       },
@@ -53,6 +55,10 @@ module.exports = {
     ]
   },
   performance: {
-    hints: process.env.NODE_ENV === 'production' ? 'warning' : false
-  }
-}
+    maxEntrypointSize: 300000,
+    hints: isProd ? 'warning' : false
+  },
+  plugins: isProd ? [] : [
+    new FriendlyErrorsPlugin()
+  ]
+};

@@ -1,21 +1,16 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import NotLazyLoadedComponent from '../components/NotLazyLoadedComponent.vue';
 
 Vue.use(Router);
 
-import Comment from '../components/Comment.vue'
+const LazyLoadedComponent = () => System.import('../components/LazyComponent.vue');
 
-const Item = process.BROWSER  ? () => System.import('../components/Item.vue') : require('../components/Item.vue');
-
-let router = new Router({
+export default new Router({
   mode: 'history',
   scrollBehavior: () => ({ y: 0 }),
   routes: [
-    { path: '/one', component: Comment },
-    { path: '/two', component: Item },
-    { path: '*', redirect: '/one' }
+    { path: '/' , component: NotLazyLoadedComponent},
+    { path: '/lazy' , component: LazyLoadedComponent}
   ]
-});
-
-
-export default router;
+})
