@@ -12,6 +12,7 @@ module.exports = {
     app: './src/entry-client.js',
     vendor: [
       'es6-promise/auto',
+      'axios',
       'vue',
       'vue-router',
       'vuex',
