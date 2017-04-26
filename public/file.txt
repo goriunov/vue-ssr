@@ -1,0 +1,1 @@
+Delete the file after clone the repo (file is needed to create public folder in the github).
