@@ -1,15 +1,16 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import actions from './actions'
+import mutations from './mutations'
+import getters from './getters'
 
-import Message from './module/message'
+Vue.use(Vuex)
 
-
-Vue.use(Vuex);
-
-export function createStore () {
+export function createStore() {
   return new Vuex.Store({
-      modules: {
-          message: Message
-      }
+    state: {},
+    actions,
+    mutations,
+    getters
   })
 }
