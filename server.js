@@ -15,7 +15,7 @@ const serverInfo = `express/${require('express/package.json').version} ` + `vue-
 
 const app = express()
 
-const template = fs.readFileSync(resolve('./dist/index.html'), 'utf-8')
+const template = isProd ? fs.readFileSync(resolve('./dist/index.html'), 'utf-8') : fs.readFileSync(resolve('./src/index.template.html'), 'utf-8')
 
 function createRenderer(bundle, options) {
   return createBundleRenderer(bundle, Object.assign(options, {
